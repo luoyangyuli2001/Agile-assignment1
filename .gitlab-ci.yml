@@ -4,7 +4,6 @@ image: node:latest
 stages:
   - install
   - build
-  - exercise
   - test
 
 variables:
@@ -44,25 +43,3 @@ e2etest:
   script:
     - echo "Run tests in headless mode"
     - npm run start:ci
-
-build_jobX:
-  stage: build
-  only:
-    - develop
-  script:
-    - echo "build job X on demoBranch works"
-
-test_jobX:
-  stage: test
-  only:
-    - main
-    - branchX
-  script:
-    - echo "Run test job X"
-
-exercise_job:
-  stage: exercise
-  only:
-    - main
-  script:
-    - echo "Run exercise job"
