@@ -5,7 +5,7 @@ import MovieReview from "../components/movieReview";
 
 const MovieReviewPage = (props) => {
   let location = useLocation();
-  const {movie, review} = location.state;
+  const { movie, review } = location.state;
 
   return (
     <PageTemplate movie={movie}>
