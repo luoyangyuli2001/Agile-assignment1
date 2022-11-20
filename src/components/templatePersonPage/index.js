@@ -1,16 +1,16 @@
 import React from "react";
-import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { getMovieImages } from "../../api/tmdb-api";
+import { getPersonImages } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from '../spinner'
+import PersonInfo from "../personInfo";
 
-const TemplateMoviePage = ({ movie, children }) => {
+const TemplatePersonPage = ({ person, children }) => {
   const { data , error, isLoading, isError } = useQuery(
-    ["movieImages", { id: movie.id }],
-    getMovieImages
+    ["personImages", { id: person.id }],
+    getPersonImages
   );
 
   if (isLoading) {
@@ -20,11 +20,10 @@ const TemplateMoviePage = ({ movie, children }) => {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  const images = data.posters 
-
+  const image = data.profiles[0] 
   return (
     <>
-      <MovieHeader movie={movie} /> 
+      {/* <MovieHeader movie={movie} />  */}
       <Grid container spacing={5} sx={{ padding: "15px" }}>
         <Grid item xs={3}>
           <div sx={{
@@ -34,16 +33,15 @@ const TemplateMoviePage = ({ movie, children }) => {
           }}>
             <ImageList 
                 cols={1}>
-                {images.map((image) => (
                     <ImageListItem key={image.file_path} cols={1}>
                     <img
                         src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
                         alt={image.poster_path}
                     />
                     </ImageListItem>
-                ))}
             </ImageList>
           </div>
+          <PersonInfo person={person} />
         </Grid>
         <Grid item xs={9}>
           {children}
@@ -53,4 +51,4 @@ const TemplateMoviePage = ({ movie, children }) => {
   );
 };
 
-export default TemplateMoviePage;
+export default TemplatePersonPage;

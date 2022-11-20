@@ -28,7 +28,6 @@ const MoviesContextProvider = (props) => {
     }
     setToWatch(newToWatch)
   };
-  console.log(toWatch)
 
   const addReview = (movie, review) => {
     setMyReviews( {...myReviews, [movie.id]: review } )

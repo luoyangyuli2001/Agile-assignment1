@@ -11,6 +11,12 @@ import img from '../../images/pexels-dziana-hasanbekava-5480827.jpg'
 import { getGenres } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from '../spinner'
+import { Slider } from "@mui/material";
+import Box from "@mui/material/Box"
+
+function valuetext(value) {
+  return `${value} min`;
+}
 
 const formControl = 
   {
@@ -35,6 +41,23 @@ export default function FilterMoviesCard(props) {
     genres.unshift({ id: "0", name: "All" });
   }
 
+  const sortOptions = [
+    { id: 0, name: "popularity.desc"},
+    { id: 1, name: "popularity.asc"},
+    { id: 2, name: "release_date.desc"},
+    { id: 3, name: "release_date.asc"},
+    { id: 4, name: "revenue.desc"},
+    { id: 5, name: "revenue.asc"},
+    { id: 6, name: "primary_release_date.desc"},
+    { id: 7, name: "primary_release_date.asc"},
+    { id: 8, name: "original_title.desc"},
+    { id: 9, name: "original_title.asc"},
+    { id: 10, name: "vote_average.desc"},
+    { id: 11, name: "vote_average.asc"},
+    { id: 12, name: "vote_count.desc"},
+    { id: 13, name: "vote_count.asc"},
+  ]
+
   const handleChange = (e, type, value) => {
     e.preventDefault();
     props.onUserInput(type, value); // NEW
@@ -47,6 +70,19 @@ export default function FilterMoviesCard(props) {
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
   };
+
+  const handleSortChange = (e) => {
+    handleChange(e, "sort", e.target.value);
+  };
+
+  const handleRuntimeChange = (e) => {
+    handleChange(e, "runtime", e.target.value);
+  };
+
+  const handleUserScoreChange = (e) => {
+    handleChange(e, "score", e.target.value);
+  };
+
 
   return (
     <Card 
@@ -87,6 +123,57 @@ export default function FilterMoviesCard(props) {
             })}
           </TextField>
         </FormControl>
+        <FormControl sx={{...formControl}}>
+          <TextField
+            select
+            label="Sort"
+            id="sort-select"
+            value={props.sortFilter}
+            onChange={handleSortChange}
+            variant="filled"
+          >
+            {sortOptions.map((sort) => {
+              return (
+                <MenuItem key={sort.id} value={sort.name}>
+                  {sort.name}
+                </MenuItem>
+              );
+            })}
+          </TextField>
+        </FormControl>
+        <Typography variant="h6" >
+            Filter
+        </Typography>
+        <Box sx={{marginLeft:"20px" ,width: "80%"}}>
+          <Typography variant="body1" >
+            Runtime
+          </Typography>
+          <Slider
+            value={props.runtimeFilter} 
+            onChange={handleRuntimeChange}
+            valueLabelDisplay="auto"
+            getAriaValueText={valuetext}
+            step={15}
+            marks
+            min={0}
+            max={390}
+          />
+        </Box>
+        <Box sx={{marginLeft:"20px" ,width: "80%"}}>
+          <Typography variant="body1" >
+            Score
+          </Typography>
+          <Slider
+            value={props.userScoreFilter} 
+            onChange={handleUserScoreChange}
+            valueLabelDisplay="auto"
+            getAriaValueText={valuetext}
+            step={1}
+            marks
+            min={0}
+            max={10}
+          />
+        </Box>
       </CardContent>
       <CardMedia
         sx={{ height: 300 }}

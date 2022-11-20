@@ -1,18 +1,18 @@
 import React, { useState } from "react";
+import { getTopRatedMovies } from "../api/tmdb-api";
+import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
-import PageTemplate from "../components/templateMovieListPage";
-import { getUpcomingMovies } from "../api/tmdb-api";
-import AddToToWatchIcon from '../components/cardIcons/addToToWatch'
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
 import MyPagination from "../components/myPagination";
 
-const UpcomingMoviesPage = () => {
+const TopRatedMoviesPage = () => {
   const [page, setPage] = useState(1);
 
   const { data, error, isLoading, isError }  = useQuery(
-    ['upComing', {page}],
-    getUpcomingMovies
-  );
+    ['topRated', {page}], 
+    getTopRatedMovies
+    )
 
   if (isLoading) {
     return <Spinner />
@@ -21,21 +21,21 @@ const UpcomingMoviesPage = () => {
   if (isError) {
     return <h1>{error.message}</h1>
   }  
-  
   const totalPages = data.total_pages;
   const movies = data.results;
+
   return (
     <>
       <PageTemplate
-        title="Upcoming Movies"
+        title="Top Rated Movies"
         movies={movies}
         action={(movie) => {
-          return <AddToToWatchIcon movie={movie} />
+          return <AddToFavoritesIcon movie={movie} />
         }}
-      />   
-      <MyPagination page={Number(page)} setPage={setPage} totalPages={Number(totalPages)}/>
+      />
+      <MyPagination page={Number(page)} setPage={setPage} totalPages={Number(totalPages-30)}/>
     </>
   );
 };
 
-export default UpcomingMoviesPage;
+export default TopRatedMoviesPage;
