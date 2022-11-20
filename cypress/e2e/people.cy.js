@@ -74,7 +74,7 @@ describe("People page tests", () => {
     });
 
     it(" displays the person's known for and acting", () => {
-      cy.get(".css-1xdt48a-MuiTypography-root").contains("Known For")
+      cy.get(".MuiGrid-grid-xs-9>.MuiTypography-h4").eq(1).contains("Known For")
       cy.get("a>.MuiImageListItem-root").should("have.length",personMovies.length);
       cy.get("a>.MuiImageListItem-root").each(($card, index) => {
         cy.wrap($card).find(".MuiImageListItemBar-title").contains(personMovies[index].title);
@@ -90,7 +90,7 @@ describe("People page tests", () => {
       const attributesName = ["Known For", "Known Credit", "Gender", "Birthday", "Place of Birth", "Also Known As"];
       const personAttributes = [person.known_for_department, credits, 
         person.gender, person.birthday, person.place_of_birth, person.also_known_as[0]]
-      cy.get(".css-57yg6t-MuiTypography-root").contains("Personal Info")
+      cy.get(".MuiGrid-grid-xs-3>.MuiBox-root>.MuiTypography-h4").contains("Personal Info")
       cy.get(".css-q244e7-MuiTypography-root").each(($line, index) => {
         cy.wrap($line).contains(attributesName[index])
         cy.wrap($line).next().contains(personAttributes[index])
