@@ -91,12 +91,9 @@ describe("People page tests", () => {
       const personAttributes = [person.known_for_department, credits, 
         person.gender, person.birthday, person.place_of_birth, person.also_known_as[0]]
       cy.get(".MuiGrid-grid-xs-3>.MuiBox-root>.MuiTypography-h4").contains("Personal Info")
-      cy.get(".css-q244e7-MuiTypography-root").each(($line, index) => {
+      cy.get(".MuiGrid-grid-xs-3>.MuiBox-root>.MuiBox-root>.MuiTypography-subtitle1").each(($line, index) => {
         cy.wrap($line).contains(attributesName[index])
         cy.wrap($line).next().contains(personAttributes[index])
-      })
-      cy.get(".css-ahj2mt-MuiTypography-root").each(($name,index) => {
-        cy.wrap($name).contains(person.also_known_as[index])
       })
     })
 
