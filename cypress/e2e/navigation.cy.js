@@ -1,5 +1,6 @@
 let discoverMovies;
-let movieId; // Enola Holmes movie id
+let people;
+
 
 describe("Navigation", () => {
   before(() => {
@@ -11,6 +12,15 @@ describe("Navigation", () => {
       .its("body")
       .then((response) => {
         discoverMovies = response.results;
+      });
+    cy.request(
+      `https://api.themoviedb.org/3/person/popular?api_key=${Cypress.env(
+          "TMDB_KEY"
+      )}&language=en-US&page=1`
+    )
+      .its("body")
+      .then((response) => {
+          people = response.results;
       });
   });
   beforeEach(() => {
@@ -44,4 +54,19 @@ describe("Navigation", () => {
       cy.url().should("include", "/person/popular");
     })
   });
+
+  describe("From the movie card to a movie's details", () => {
+    it("navigates to the movie details page and change browser URL", () => {
+      cy.get(".MuiCardActions-root").eq(0).contains("More Info").click();
+      cy.url().should("include", `/movies/${discoverMovies[0].id}`);
+    });
+  });
+
+  describe("From the person card to a person's details", () => {
+    it("navigates to the person details page and change browser URL", () => {
+      cy.visit("/person/popular")
+      cy.get(".MuiCardActions-root").eq(0).contains("More Info").click();
+      cy.url().should("include", `/person/${people[0].id}`);
+    })
+  })
 });
