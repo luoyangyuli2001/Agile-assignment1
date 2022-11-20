@@ -53,6 +53,10 @@ describe("Navigation", () => {
       cy.get(".MuiPaper-root>li").eq(0).click();
       cy.url().should("include", "/person/popular");
     })
+    it("navigates to login page", () => {
+      cy.get(".MuiToolbar-root>.MuiButtonBase-root").click();
+      cy.url().should("include", "/login");
+    })
   });
 
   describe("From the movie card to a movie's details", () => {
