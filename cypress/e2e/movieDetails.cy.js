@@ -1,5 +1,6 @@
 let movies;
 let movie;
+let movieReviews;
 
 describe("Movie Details Test", () => {
   before(() => {
@@ -66,4 +67,57 @@ describe("Movie Details Test", () => {
         });
     });
   })
+
+  describe("Reviews on the movie details page", () => {
+    before(() => {
+      cy.request(
+        `https://api.themoviedb.org/3/movie/
+        ${movies[1].id}
+        /reviews?api_key=${Cypress.env("TMDB_KEY")}`
+      )
+        .its("body")
+        .then((reviews) => {
+          movieReviews = reviews.results;
+        });
+    });
+
+    it(" display the review author and excerpt", () => {
+      cy.visit(`/movies/${movies[1].id}`);
+      cy.get("h3");
+      cy.get("button").contains("Reviews").click();
+      const authorList = movieReviews.map(a => a.author);
+      const excerptList = movieReviews.map(c => c.content);
+      cy.get("tbody>tr").each(($review, index) => {
+        cy.wrap($review).get("th").contains(authorList[index]);
+        cy.wrap($review).contains(excerptList[index].substring(0,10));
+      });
+    });
+
+    it("a situation that doesn't have any reviews", () => {
+      cy.visit(`/movies/1051170`);
+      cy.get("h3");
+      cy.get("button").contains("Reviews").click();
+      cy.get("tbody>tr").should("have.length", 0);
+    });
+  })
+
+  describe("Review on movie's full review page", () => {
+    beforeEach(() => {
+      cy.visit(`/movies/${movies[1].id}`);
+      cy.get("h3");
+      cy.get("button").contains("Reviews").click();
+      cy.get("td>a").contains("Full Review").eq(0).click();
+    });
+
+    it("displays the name of the author", () => {
+      const author = movieReviews[0].author;
+      cy.get("p").eq(0).contains(author);
+    });
+
+    it("displays the content of the review", () => {
+      const excerpt = movieReviews[0].content;
+      cy.get("p").eq(1).contains(excerpt.substring(0,10));
+    });
+  });
+
 })
