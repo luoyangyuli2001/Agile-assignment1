@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const genderParseString = (genderNum) => {
   if (genderNum === 1) return "Female";
-  else return "Male";
+  else if (genderNum === 2) return "Male";
+  else return "Other";
 }
 
 const PersonInfo = ({ person }) => {
