@@ -29,4 +29,14 @@ describe("The login feature", () => {
     cy.url().should("not.include", "movies");
     cy.get(".MuiToolbar-root>.MuiButtonBase-root").click();
   });
+
+  it("After logging out, the interface returns to the not logged in state", () => {
+    cy.loginWithEmailAndPassword("123456@gmail.com", "321323")
+    cy.get("h6").contains("Welcome!");
+    cy.get("h6").contains("123456@gmail.com");
+    cy.url().should("not.include", "movies");
+    cy.get(".MuiToolbar-root>.MuiButtonBase-root").click();
+    cy.get("a").contains("click").click();
+    cy.get("h6").contains("All you ever wanted to know about Movies!");
+  })
 });
