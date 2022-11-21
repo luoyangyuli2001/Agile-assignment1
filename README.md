@@ -4,6 +4,7 @@ __Name:__ Luo Yang
 
 This repository contains the implementation of a React App and its associated Cypress tests and GitLab CI pipeline.
 
+Gitlab Link: https://gitlab.com/20099902/agile-assignment1
 ## React App Features.
  
 + New moive page - Top rated moives
@@ -38,6 +39,7 @@ This repository contains the implementation of a React App and its associated Cy
 https://github.com/luoyangyuli2001/Agile-assignment1
 
 ## Independent learning (If relevant).
+
 
 ### Auto Deployment on Github
 
