@@ -1,5 +1,4 @@
 {
-  "homepage": "https://luoyangyuli2001.github.io/Agile-assignment1",
   "name": "movies",
   "version": "0.1.0",
   "private": true,
@@ -25,8 +24,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start:ci": "start-server-and-test 'http-server ./build  -p 3000 -P http://localhost:3000?' 3000 'cypress run --browser edge '",
     "start": "react-scripts start",
     "build": "react-scripts build",
