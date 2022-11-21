@@ -1,23 +1,23 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
-import HomePage from "./pages/homePage";
-import MoviePage from "./pages/movieDetailsPage";
-import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
-import MovieReviewPage from "./pages/movieReviewPage";
 import SiteHeader from './components/siteHeader'
-import UpcomingMoviesPage from "./pages/upcomingMoviesPage";
-import TopRatedMoviesPage from "./pages/topRatedMoviesPage";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
 import MoviesContextProvider from "./contexts/moviesContext";
-import AddMovieReviewPage from './pages/addMovieReviewPage';
-import PopularPeoplePage from './pages/popularPeoplePage';
-import PersonPage from './pages/personDetialsPage';
-import LoginPage from "./pages/loginPage";
-import RegisterPage from "./pages/registerPage";
-import ResetPage from "./pages/resetPage";
-import LogoutPage from "./pages/logoutPage";
+import HomePage from "./pages/homePage";
+const MovieReviewPage = lazy(() => import("./pages/movieReviewPage"));
+const UpcomingMoviesPage = lazy(() => import("./pages/upcomingMoviesPage"));
+const FavoriteMoviesPage = lazy(() => import("./pages/favoriteMoviesPage"));
+const TopRatedMoviesPage = lazy(() => import("./pages/topRatedMoviesPage"));
+const AddMovieReviewPage = lazy(() => import('./pages/addMovieReviewPage'));
+const PopularPeoplePage = lazy(() => import('./pages/popularPeoplePage'));
+const PersonPage = lazy(() => import('./pages/personDetialsPage'));
+const ResetPage = lazy(() => import("./pages/resetPage"));
+const RegisterPage = lazy(() => import("./pages/registerPage"));
+const LoginPage = lazy(() => import("./pages/loginPage"));
+const LogoutPage = lazy(() => import("./pages/logoutPage"));
+const MoviePage = lazy(() => import("./pages/movieDetailsPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +35,7 @@ const App = () => {
       <BrowserRouter>
         <SiteHeader />
         <MoviesContextProvider>
+        <Suspense fallback={<h1>Loading page</h1>}>
         <Routes>
           <Route path="/logout" element={ <LogoutPage />}/>
           <Route path="/login" element={ <LoginPage />} />
@@ -51,6 +52,7 @@ const App = () => {
           <Route path="/person/popular" element={<PopularPeoplePage />} />
           <Route path="/person/:id" element={<PersonPage />} />
         </Routes>
+        </Suspense>
         </MoviesContextProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
