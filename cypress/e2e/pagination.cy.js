@@ -4,9 +4,39 @@ let upcomingMoviesFinalPage;
 let topRatedMovies;
 let topRatedMoviesNextPage;
 let topRatedMoviesFinalPage;
+let discoverMovies;
+let discoverMoviesTwoPages;
+let discoverMoviesThreePages;
 
 describe("Pagination tests", () => {
   before(() => {
+    cy.request(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${Cypress.env(
+        "TMDB_KEY"
+      )}&language=en-US&sort_by=popularity.desc&include_adult=false&with_runtime.gte=0&with_runtime.lte=390&vote_average.gte=0&vote_average.lte=10&include_video=false&page=1`
+    )
+      .its("body")
+      .then((response) => {
+        discoverMovies = response.results;
+      });
+    cy.request(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${Cypress.env(
+        "TMDB_KEY"
+      )}&language=en-US&sort_by=popularity.desc&include_adult=false&with_runtime.gte=0&with_runtime.lte=390&vote_average.gte=0&vote_average.lte=10&include_video=false&page=2`
+    )
+      .its("body")
+      .then((response) => {
+        discoverMoviesTwoPages = [...discoverMovies, ...response.results];
+      });
+    cy.request(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${Cypress.env(
+        "TMDB_KEY"
+      )}&language=en-US&sort_by=popularity.desc&include_adult=false&with_runtime.gte=0&with_runtime.lte=390&vote_average.gte=0&vote_average.lte=10&include_video=false&page=3`
+    )
+      .its("body")
+      .then((response) => {
+        discoverMoviesThreePages = [...discoverMoviesTwoPages, ...response.results]
+      });
     cy.request(
       `https://api.themoviedb.org/3/movie/upcoming?api_key=${Cypress.env(
         "TMDB_KEY"
@@ -123,4 +153,30 @@ describe("Pagination tests", () => {
     });
   });
 
+  describe("Infinite Scroll on discover page", () => {
+    beforeEach(() => {
+      cy.visit("/");
+    })
+
+    it("displays more 20 movies when infinite scroll trigger once", () => {
+      cy.window().scrollTo('bottom');
+      cy.get(".MuiCardHeader-content").should("have.length", 40);
+      cy.get(".MuiCardHeader-content").each(($card, index) => {
+        cy.wrap($card).find("p").contains(discoverMoviesTwoPages[index].title);
+      });
+    })
+
+    it("displays more movies when infinite scroll trigger more than once", () => {
+      cy.window().scrollTo('bottom');
+      cy.get(".MuiCardHeader-content").should("have.length", 40);
+      cy.get(".MuiCardHeader-content").each(($card, index) => {
+        cy.wrap($card).find("p").contains(discoverMoviesTwoPages[index].title);
+      });
+      cy.window().scrollTo('bottom');
+      cy.get(".MuiCardHeader-content").should("have.length", 60);
+      cy.get(".MuiCardHeader-content").each(($card, index) => {
+        cy.wrap($card).find("p").contains(discoverMoviesThreePages[index].title);
+      });
+    })
+  })
 });
