@@ -138,16 +138,15 @@ describe("Filtering", () => {
       cy.request(
         `https://api.themoviedb.org/3/discover/movie?api_key=${Cypress.env(
           "TMDB_KEY"
-        )}&language=en-US&sort_by=popularity.desc&include_adult=false&with_runtime.gte=0&with_runtime.lte=390&vote_average.gte=7&vote_average.lte=10&include_video=false&page=1`
+        )}&language=en-US&sort_by=popularity.desc&include_adult=false&with_runtime.gte=0&with_runtime.lte=390&vote_average.gte=3&vote_average.lte=7&include_video=false&page=1`
       )
         .its("body")
         .then((response) => {
           scoreMovies = response.results;
         });
     })
-    it("show movies with score between 7 and 10", () => {
-      cy.get("span[data-index=4]").eq(1).click({force: true});
-      cy.get("span[data-index=6]").eq(1).click({force: true});
+    it("show movies with score between 3 and 7", () => {
+      cy.get("span[data-index=3]").eq(1).click({force: true});
       cy.get("span[data-index=7]").eq(1).click({force: true});
       cy.get("#filled-search").clear()
       cy.get(".MuiCardHeader-root").should("have.length", 20);
