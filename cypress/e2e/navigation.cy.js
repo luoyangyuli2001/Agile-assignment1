@@ -86,4 +86,14 @@ describe("Navigation", () => {
     });
   });
 
+  describe("From the favourites page to a movie's details", () => {
+    it("navigates to the movie details page from the favourites page and change browser URL", () => {
+      cy.get("button[aria-label='add to favorites']").eq(0).click();
+      cy.get(".MuiButtonBase-root").eq(0).click();
+      cy.get(".MuiPaper-root>li").eq(1).click();
+      cy.get(".MuiCardActions-root>a").eq(1).click({force: true});
+      cy.url().should("include", `/movies/${discoverMovies[0].id}`);
+      cy.get("h3").next().contains(discoverMovies[0].overview);
+    });
+  });
 });
