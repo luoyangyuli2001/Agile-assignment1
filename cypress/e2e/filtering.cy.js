@@ -1,6 +1,7 @@
 import { filterByGenre, filterByTitle } from "../support/e2e";
 let movies;
 let sortedMovies;
+let runtimeMovies;
 describe("Filtering", () => {
   before(() => {
     cy.request(
@@ -102,6 +103,31 @@ describe("Filtering", () => {
       cy.get(".MuiCardHeader-root").should("have.length", 20);
       cy.get(".MuiCardHeader-content").each(($card, index) => {
         cy.wrap($card).find("p").contains(sortedMovies[index].title);
+      });
+    })
+  })
+  
+  describe("Runtime filter", () => {
+    before(() => {
+      cy.request(
+        `https://api.themoviedb.org/3/discover/movie?api_key=${Cypress.env(
+          "TMDB_KEY"
+        )}&language=en-US&sort_by=popularity.desc&include_adult=false&with_runtime.gte=60&with_runtime.lte=150&vote_average.gte=0&vote_average.lte=10&include_video=false&page=1`
+      )
+        .its("body")
+        .then((response) => {
+          runtimeMovies = response.results;
+        });
+    })
+    it("show movies with runtime between 60mins and 150mins", () => {
+      cy.get("span[data-index=4]").eq(0).click();
+      cy.get("span[data-index=20]").eq(0).click();
+      cy.get("span[data-index=13]").eq(0).click();
+      cy.get("span[data-index=10]").eq(0).click();
+      cy.get("#filled-search").clear()
+      cy.get(".MuiCardHeader-root").should("have.length", 20);
+      cy.get(".MuiCardHeader-content").each(($card, index) => {
+        cy.wrap($card).find("p").contains(runtimeMovies[index].title);
       });
     })
   })
